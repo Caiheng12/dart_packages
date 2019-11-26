@@ -457,7 +457,6 @@ class BatteryLevelViewController {
     ```
     step5: 到这一步我们的插件对应android平台的代码已经完成,可以在demo中运行看下效果。
     ![10_flutter_android_review](10_flutter_android_review.png)
-
     小结: 
     - 注册MethodChannel
     - 注册View构建的Widget
