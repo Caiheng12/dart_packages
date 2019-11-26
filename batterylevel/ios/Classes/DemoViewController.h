@@ -6,11 +6,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Flutter/Flutter.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@interface DemoViewController : NSObject<FlutterStreamHandler, FlutterPlatformView>
 
-@interface DemoViewController : NSObject
+- (instancetype)initWithFrame:(CGRect)frame
+                    registrar:(NSObject<FlutterPluginRegistrar>*)registrar
+                       viewId:(int64_t)viewId
+                         args: (id _Nullable)args;
 
 @end
 
-NS_ASSUME_NONNULL_END
+
+@interface DemoView : UIView
+
+@property (nonatomic, strong) UITextField *sendTextField;
+@property (nonatomic, strong) UIButton *sendButton;
+@property (nonatomic, strong) UITextField *recieveTextField;
+@property (nonatomic, strong) UIButton *recieveButton;
+
+@end
+

@@ -3,7 +3,19 @@ part of batterylevel;
 
 
 class BatterLevelView extends StatefulWidget {
-  BatterLevelView({Key key}) : super(key: key);
+
+  StreamController<String> _nativeToEvalueStream;
+  StreamController<String> _flutterToEvaluteStream;
+
+  double _width;
+  double _height;
+
+  BatterLevelView(double width, double height, {StreamController nativeToEvalueStream,
+   StreamController flutterToEvaluteStream
+   }): this._nativeToEvalueStream = nativeToEvalueStream,
+      this._flutterToEvaluteStream = flutterToEvaluteStream,
+      this._width = width,
+      this._height = height;
 
   @override
   _BatterLevelViewState createState() => _BatterLevelViewState();
@@ -13,32 +25,26 @@ class _BatterLevelViewState extends State<BatterLevelView> {
 
   static  String  PLUGIN_PLAT_FORM_BASIC_VIEW_NAME =  "flutter.io/batterylevel_view";
   BatteryLevelViewController _controller;
+  StreamController get _nativeToEvalueStream => widget._nativeToEvalueStream;
+  StreamController get  _flutterToEvaluteStream => widget._flutterToEvaluteStream;
+  StreamSubscription _subscription;
+
+  @override
+  void initState() { 
+    super.initState();
+   _subscription = _nativeToEvalueStream.stream.listen((flutterText){
+      setState(() {
+        _controller.sendMessageToNatvie(flutterText);
+      });
+   });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text('this is an natvive view'),
-          // Container(height: 200, width: 300, color: Colors.grey,),
-          Container(
-            height: 600.0,
-            width: 300.0,
-            child:  _buildPlatformView(context),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-             Expanded(child: FlatButton(child: Text("send message from native", overflow: TextOverflow.fade, softWrap: true, textAlign: TextAlign.center,), onPressed: (){
-               _controller.sendMessageToNatvie("message from flutter");
-             },),),
-             Expanded(child:  FlatButton(child: Text("recieve message from flutter", textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, softWrap: true, maxLines: 4,), onPressed: (){
-               _controller.bindNativeBroadCastStreamHandler();
-             }),)
-          ],)
-        ],
-      ) ,
+      width: widget._width,
+      height: widget._height ,
+      child:_buildPlatformView(context),
     );
   }
   
@@ -54,7 +60,7 @@ class _BatterLevelViewState extends State<BatterLevelView> {
           creationParamsCodec: StandardMessageCodec(),
         );
       } else if (Platform.isIOS) {
-        return AndroidView(
+        return UiKitView(
           viewType: PLUGIN_PLAT_FORM_BASIC_VIEW_NAME,
           layoutDirection: TextDirection.ltr,
           hitTestBehavior: PlatformViewHitTestBehavior.opaque,
@@ -64,15 +70,12 @@ class _BatterLevelViewState extends State<BatterLevelView> {
         );
       } else {
         return Container();
-        throw UnimplementedError("doew not support this platform view ");
       }
   }
 
   //Step2:当Native的视图创建完成后,会接到到`onPlatformViewCreated`的回调方法,根据对应的`viewId`生成methodChannel用于和当前生成的视图交互。
   void onPlatformViewCreated(int viewId) { 
-     _controller = BatteryLevelViewController(viewId: viewId);
+     _controller = BatteryLevelViewController(viewId: viewId, flutterToEvaluteStream: _flutterToEvaluteStream);
      _controller.bindNativeMethodCallBackHandler();
-     _controller.bindNativeBroadCastStreamHandler();
   }
-
 }

@@ -1,25 +1,17 @@
 package com.example.batterylevel;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import io.flutter.plugin.common.BinaryMessenger;
-import io.flutter.plugin.common.EventChannel;
-import io.flutter.plugin.common.EventChannel.StreamHandler;
-import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -27,17 +19,15 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.platform.PlatformView;
 
-public class AndroidViewDemo implements PlatformView, MethodCallHandler, StreamHandler {
+public class AndroidViewDemo implements PlatformView, MethodCallHandler {
 
     private BinaryMessenger  binaryMessenger;
     private View view = null;
-    private TextView textView = null;
-    private EditText editText = null;
+    private EditText recieveText = null;
+    private EditText sendText = null;
+    private Button recieveButton = null;
     private Button sendButton = null;
     private MethodChannel methodChannel;
-    private EventChannel eventChannel;
-    private EventSink eventSink;
-    private Registrar registrar;
 
     public AndroidViewDemo(int viewId,
                        BinaryMessenger messenger,
@@ -46,9 +36,7 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler, StreamH
         this.binaryMessenger = messenger;
         this.methodChannel = new MethodChannel(binaryMessenger, Constant.PLUGIN_PLAT_FORM_BASIC_VIEW_NAME + "_" + viewId);
         this.methodChannel.setMethodCallHandler(this);
-        this.eventChannel =  new EventChannel(binaryMessenger, Constant.PLUGIN_PLAT_FORM_BASIC_VIEW_NAME + "_event_" + viewId);
-        this.eventChannel.setStreamHandler(this);
-        this.registrar = registrar;
+
         setupViews(registrar);
     }
 
@@ -62,20 +50,27 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler, StreamH
 
     }
 
-    private void setupViews(Registrar registrar) {
+    private void setupViews(final Registrar registrar) {
 
         view = (View) LayoutInflater.from(registrar.activity()).inflate(R.layout.android_view, null);
-        sendButton = view.findViewById(R.id.sendButton);
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        sendText = view.findViewById(R.id.sendEditText);
+        sendText.setHint("please in put text send to flutter");
+        sendText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                methodChannel.invokeMethod("flutterToEvalute", textView.getText());
+                sendText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) registrar.context().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
-        textView = view.findViewById(R.id.resultView);
-        editText = view.findViewById(R.id.editText);
-        editText.setHint("please in put text");
-        editText.addTextChangedListener(new TextWatcher() {
+
+        sendText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+            }
+        });
+        sendText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -88,7 +83,26 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler, StreamH
 
             @Override
             public void afterTextChanged(Editable s) {
-               // methodChannel.invokeMethod("flutterToEvalute", textView.getText());
+                sendText.setText(s);
+
+            }
+        });
+
+        sendButton = view.findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                methodChannel.invokeMethod("flutterToEvalute", sendText.getText());
+            }
+        });
+
+        recieveText = view.findViewById(R.id.recieveEditText);
+        recieveText.setHint("please in put text send to flutter");
+        recieveButton = view.findViewById(R.id.sendButton);
+        recieveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -99,33 +113,15 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler, StreamH
         if (methodCall.method.equals("nativeToEvalute")) {
             if(methodCall.arguments instanceof String) {
                 String text = (String)methodCall.arguments;
-                try {
-                    JSONObject text1 = new JSONObject("test");
-                    System.out.println(text1);
-                } catch (JSONException e) {
-                    System.out.println(e.toString());
-                }
-
+                recieveText.setText(text);
             } else if (methodCall.arguments instanceof JSONObject) {
                 JSONObject json = (JSONObject)methodCall.arguments;
-                editText.setText(json.toString());
+                recieveText.setText(json.toString());
             }
         } else {
             result.notImplemented();
         }
 
-    }
-
-    @Override
-    public void onListen(Object o, EventSink eventSink) {
-        this.eventSink = eventSink;
-    }
-
-    @Override
-    public void onCancel(Object o) {
-        this.eventSink = null;
-        this.eventChannel.setStreamHandler(null);
-        this.methodChannel.setMethodCallHandler(null);
     }
 
     @Override
@@ -138,7 +134,32 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler, StreamH
         methodChannel.setMethodCallHandler(null);
     }
 
-    private void sinkText(String text) {
-        methodChannel.invokeMethod("sendTextToFlutter", text);
-    }
+
 }
+
+//TextField edit event monitor
+/**
+ * //        sendText.addTextChangedListener(new TextWatcher() {
+ * //            @Override
+ * //            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+ * //
+ * //            }
+ * //
+ * //            @Override
+ * //            public void onTextChanged(CharSequence s, int start, int before, int count) {
+ * //
+ * //            }
+ * //
+ * //            @Override
+ * //            public void afterTextChanged(Editable s) {
+ * //                // methodChannel.invokeMethod("flutterToEvalute", textView.getText());
+ * //            }
+ * //        });
+ * */
+//JSON Convert
+//  try {
+//          JSONObject text1 = new JSONObject("test");
+//          System.out.println(text1);
+//          } catch (JSONException e) {
+//          System.out.println(e.toString());
+//          }

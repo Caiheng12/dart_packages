@@ -4,42 +4,72 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:background="@color/colorPrimary"
-        android:layout_marginTop="100dp"
-        android:id="@+id/resultView"
-        android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:text="test" />
+    android:layout_height="match_parent"
+    android:background="@color/colorGray300"
+    >
 
     <EditText
-        android:background="@color/colorgreen"
-        android:id="@+id/editText"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/resultView"
+        android:id="@+id/sendEditText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/colorYellow"
+        android:ems="0"
         android:inputType="textPersonName"
-        android:text="名称"
+        android:text="sendText"
+        android:textSize="12sp"
+        android:hint="please input "
+        android:tooltipText="@string/sendEditHit"
         tools:visibility="visible" />
 
     <Button
         android:id="@+id/sendButton"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/sendEditText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
         android:height="50dp"
-        android:background="#758D4E"
-        android:backgroundTint="#F8F8F8"
+        android:background="@color/colorBlue"
         android:text="发送按钮"
+        android:textSize="12sp"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/recieveEditText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/sendButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/colorYellow"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="recieveText"
+        android:textSize="12sp"
+        android:tooltipText="@string/recieveEditHit"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/recieveButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/recieveEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/colorBlue"
+        android:text="接收按钮"
+        android:textSize="12sp"
+        android:layout_marginBottom="10dp"
         android:visibility="visible" />
 
 </LinearLayout>

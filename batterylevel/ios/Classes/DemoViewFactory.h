@@ -4,13 +4,14 @@
 //
 //  Created by Guo Longxiang, (Longxiang.Guo@partner.bmw.com) on 2019/11/26.
 //
-
+#import <Flutter/Flutter.h>
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@interface DemoViewFactory : NSObject<FlutterPlatformViewFactory>
 
-@interface DemoViewFactory : NSObject
+- (instancetype)initWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar;
 
 @end
 
-NS_ASSUME_NONNULL_END
+
+

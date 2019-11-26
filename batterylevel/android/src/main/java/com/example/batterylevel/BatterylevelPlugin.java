@@ -42,7 +42,7 @@ public class BatterylevelPlugin implements MethodCallHandler {
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else if (call.method.equals("getBatteryLevel")){
-      result.success("Android Battery level: " + getBatteryLevel());
+      result.success(getBatteryLevel());
     } else {
       result.notImplemented();
     }

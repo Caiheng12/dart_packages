@@ -1,0 +1,22 @@
+PODS:
+  - batterylevel (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - batterylevel (from `.symlinks/plugins/batterylevel/ios`)
+  - Flutter (from `.symlinks/flutter/ios`)
+
+EXTERNAL SOURCES:
+  batterylevel:
+    :path: ".symlinks/plugins/batterylevel/ios"
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+
+SPEC CHECKSUMS:
+  batterylevel: 5f7a345f0a4a574dde843c590cc0d2c9a18a11a4
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+
+PODFILE CHECKSUM: 7fb83752f59ead6285236625b82473f90b1cb932
+
+COCOAPODS: 1.6.1
