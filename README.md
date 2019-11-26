@@ -1,14 +1,16 @@
 # Flutter Package 
 ## 目录
-1. Flutter依赖包的简介.
-3. Dart Package开发。
-4. mobile2.0中目前主要使用的dart package,以及他们的主要作用。
-5. Flutter Plugin开发。
-6. mobile2.0中目前主要使用的插件,以及它们的主要作用。
-7. 插件的通信原理
-8. 怎么将dart包和插件发布到官方pub上。
-9. 插件和包的几种集成方式,以及使用场景介绍。
-10. 参考文档
+[1.Flutter依赖包的简介](Flutter依赖包的简介)
+[2.Dart Package开发](Dart Package开发)
+[3.Flutter Plugin简介](Flutter Plugin简介)
+[4.Flutter插件开发](Flutter插件开发)
+[4.1 第一阶段:创建Flutter Plugin工程](第一阶段:创建FlutterPlugin工程)
+[4.2 第二阶段:编写android端代码](第二阶段:编写android端代码)
+[4.3 第三阶段: 编写Flutter端代码](第三阶段:编写Flutter端代码)
+[4.4 第4阶段: iOS端代码编写](第4阶段:iOS端代码编写)
+[5. 插件的集中集成方式](插件的集中集成方式)
+[6. 怎样将插件发布到pub库](怎样将插件发布到pub库)
+[7. 参考资料](参考资料)
 
 ## Flutter依赖包的简介
 - 它属于一个单独的功能模块,可以同其它语言一样,如C++的dll,iOS使用的framework,android使用的jar包,npm包,等等这些都属于一种外置的依赖包,他们作为一个独立的工程模块可以在多个应用中使用,flutter也是一样,官方也提供了相应的依赖包,需在flutter工程内的`pubspec.yaml`添加相应的依赖包的配置文件引入。
@@ -21,13 +23,13 @@
 
 - 下面开始本章节的具体内容,先给自己定一个小目标,开发一个简单的`dart package`并集成到Demo中.在做demo之前请确保你的电脑已经安装好了`Flutter`、`Android`、`iOS`开发环境。
 
-## Dart Package开发。
+## Dart Package开发
 - step1: 创建包,可以通过命令创建和使用IDE工具创建。
   - 代码创建方式如下: 
     - `flutter create --template=package [your package name]` 
   - 通过Android Studio工具的图形化命令创建。
-    ![1_create_flutter_project](1_create_flutter_project)
-    ![2_create_flutter_package](2_create_flutter_package)
+    ![1_create_flutter_project](1_create_flutter_project.png)
+    ![2_create_flutter_package](2_create_flutter_package.png)
   - 需要注意`包名需使用英文小写`,可以使用`_`分开.如`caculator_package`
 
 - step2: 创建完成后,进入到创建的工程目录中.
@@ -166,7 +168,7 @@ dependencies:
   step7: 设置完`pubspec.yaml`之后,需要从新更新工程的依赖包
   - 执行`flutter package get`更新依赖包。
   - 下载完成后依赖包会出现在工程中的`dependency`栏目下.如图,我使用的是VSCode,界面如下:
-  ![3_package_dependency](3_package_dependency)
+  ![3_package_dependency](3_package_dependency.png)
   step8: 到这一步我们就已经把创建的package成功的集成到我们的demo工程中了,下面可以愉快的进行开发了。
   - 在`lib/main.dart`中导入`import 'package:caculator_package/caculator_package.dart';`
   - 使用package定义的function
@@ -187,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ```
   step8: 运行我们的demo工程,点击加号按钮,可以看到数字增加,说明我们的dart包成功运行了。
   - 附上一张效果图:
-  ![4_pacakge_result_ui](4_pacakge_result_ui)
+  ![4_pacakge_result_ui](4_pacakge_result_ui.png)
 
  ## 目前项目中使用的package有哪些?
   - 按照功能来划分目前主要有以下几类。
@@ -233,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ├── binary_messenger.dart。 将数据进行封装,传递给对应平台的底层接口
 ```
 主要类之间的关如下:
-![12_flutter_plugin_classes](12_flutter_plugin_classes)
+![12_flutter_plugin_classes](12_flutter_plugin_classes.png)
 - BasicMessageChannel: 主要用于传递基本的消息类型,它不能显示的指定方法名,数据格式较为单一,不太适合直接使用与复杂的业务逻辑。是用此类时通常需要自己定义对messageCodec,自定义消息格式.
 - MethodChannel: 支持方法传递,自带基本的数据类编解码,使用简单。
 - OptionalMethodChannel: 和MethodChannel基本一致,native端未实现对应的注册方法时不会抛出异常
@@ -256,13 +258,13 @@ class _MyHomePageState extends State<MyHomePage> {
   static const int _valueMap = 13;
 ```
 了解上面的几个基本类之后,再看下面的通信过程就比较容易理解了。
-![11_flutter_plugin_communication](11_flutter_plugin_communication)
+![11_flutter_plugin_communication](11_flutter_plugin_communication.png)
  
 
 ## Flutter插件开发
 - 目前flutter的生态环境不够完善,官方发的插件库无法覆盖我们所有的业务需求,比如`地图`,`支付`,`音视频`,对国内一些大厂的三方`SDK`支持不够友好,所以在实际开发中可能需要自己开发对应的插件.下面以获取设备信息为例,来创建一个简单的插件.主要分为四个阶段, 创建Flutter Plugin工程, 编写`Android`平台的代码,编写`Flutter`平台的代码, `编写iOS`平台的代码.此外我们还需要对自己创建的插件做一些测试和example的补充,并且附上完成的ReadME.md以及Api文档。
 
-### 第一阶段: 创建Flutter Plugin工程
+### 第一阶段:创建FlutterPlugin工程
 - step1: 首先创建插件项目.
   - 这里选择使用代码创建,同样也可以使用`Android Studio`创建,同创建`dart package`类似。
   - `flutter create --template=plugin -i objc -a java batterylevel`,具体参数含义可以在终端通过 flutter help查看,下面是其中几个需要经常用到的参数.
@@ -297,12 +299,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### 第二阶段:编写android端代码
  - step1: 编写对应的bridge方法实现,在`Android Studio`中打开`batterylevel`插件中,找到下面这个文件夹。
-      ![5_plugin_android_src](5_plugin_android_src)
+      ![5_plugin_android_src](5_plugin_android_src.png)
    - 在`project`模式下我们无法浏览到`src.main`中的文件,需要切换成`Android`的编辑模式.
-      ![6_plugin_android_src_edit](6_plugin_android_src_edit)
+      ![6_plugin_android_src_edit](6_plugin_android_src_edit.png)
    - 切换之后可以到如下三个`target`,最上面一个`batterylevel`和我们创建的插件名字一样,他是`flutter target`,然后是`batterylevel_android`是插件对应的`android`端的代码,最后一个是`battery_example_android`他是用于调试此插件的demo工程.
    - 按如图所示,设置`batterylevel_android`和`battery_example_android` target的 sdk版本,这样就不会有编译警告了。
-      ![7_plugin_android_content](7_plugin_android_content)
+      ![7_plugin_android_content](7_plugin_android_content.png)
    - 首先进入到`BatterylevelPlugin`中,编写`android`端获取设备电量信息的详细代码
    ```java
      private int getBatteryLevel() {
@@ -386,16 +388,18 @@ class _MyHomePageState extends State<MyHomePage> {
     - 注册对应的MethodChannel用于平台之间的双向通信
     - 如果需要传递视图则需要单独为每个视图创建对应的`PlatformViewFactory`并注册.
 
-### 第三阶段: 编写Flutter端代码
-   step1: 安卓端的代码完成后,开始编写Flutter端的代码。也可以先将android和iOS两个平台的代码写完再写flutter端代码.(不推荐,先保证一个平台能运行起来,便于我们提早发现问题)。
-    - 在./lib文件夹下面先创建我们所需要的三个文件
-    `.
+### 第三阶段:编写Flutter端代码
+   - step1: 安卓端的代码完成后,开始编写Flutter端的代码。也可以先将android和iOS两个平台的代码写完再写flutter端代码.(不推荐,先保证一个平台能运行起来,便于我们提早发现问题)。
+```tree
+    // 在./lib文件夹下面先创建我们所需要的三个文件
 ├── batterylevel.dart.  //interface文件,用于暴露该插件的所有公开的方法和类
 └── src
     ├── battery_level.dart   //用于获取native端的电量信息
     ├── battery_level_view.dart  //用于获取native端的视图并包裹成一个flutter端的Widget
-    └── battery_level_view_controller.dart` //用于控制和native端视图的通信
-    - 在`./lib/batterylevel.dart.`interface文件中`最上面一行`使用系统提供的关键字`library`定义该库的名称,注意这里需要与`pubspec.yaml`中插件的名字相同.然后通过 `part [source file]` 和 `part of [library]`关联和库有关的所有文件。他们的使用方式如下:
+    └── battery_level_view_controller.dart //用于控制和native端视图的通信
+  ```
+
+    - 在./lib/batterylevel.dart.最上面一行使用系统提供的关键字*library*定义该库的名称,注意这里需要与*pubspec.yaml*中插件的名字相同.然后通过 *part [source file]* 和 *part of [library]*关联和库有关的所有文件。他们的使用方式如下:
     ```dart
     // 在./lib/src/batterylevel.dart文件中使用  part of batterylevel; 
     // 在./lib/batterylevel.dart 中使用 part 'src/battery_level.dart';
@@ -452,16 +456,115 @@ class BatteryLevelViewController {
    }
     ```
     step5: 到这一步我们的插件对应android平台的代码已经完成,可以在demo中运行看下效果。
-    ![10_flutter_android_review](10_flutter_android_review)
+    ![10_flutter_android_review](10_flutter_android_review.png)
 
     小结: 
     - 注册MethodChannel
     - 注册View构建的Widget
    
-### 第4阶段: iOS端代码编写
+### 第4阶段:iOS端代码编写
+ - 整体思路同android写法类似,分为三个步骤
+ step1: 注册该Plugin的`registrar`实例,这一步主要创建了BinaryMessage,用于管理该插件的所有通信。在AppDelegate启动时开始注册.
+  ```Objective-C 
+- (BOOL)application:(UIApplication *)application
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  [GeneratedPluginRegistrant registerWithRegistry:self];
+  // Override point for customization after application launch.
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+//然后进入到`GeneratedPluginRegistrant`中,此类为系统自动生成,用于管理所有的插件注册。
++ (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
+  [BatterylevelPlugin registerWithRegistrar:[registry registrarForPlugin:@"BatterylevelPlugin"]];
+}
+  ```
+//最后进入到`BatterylevelPlugin`,这歌类才是我们插件的具体实现入口。前面2部分的操作都是为了给插件提供一个`FlutterPluginRegistrar`实例,通过该实例对象就能获取到和插件通信的`BinaryMessenger`。
+  step2: 注册对应的MethodChannel用于平台之间的双向通信
+  ```Objective-C
++ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+  FlutterMethodChannel* channel = [FlutterMethodChannel
+      methodChannelWithName:@"flutter.io/batterylevel"
+            binaryMessenger:[registrar messenger]];
+  BatterylevelPlugin* instance = [[BatterylevelPlugin alloc] init];  
+    DemoViewFactory* factory = [[DemoViewFactory alloc]initWithRegistrar:registrar];
+    [registrar registerViewFactory:factory withId:@"flutter.io/batterylevel_view"];
+  [registrar addMethodCallDelegate:instance channel:channel]; 
+}
+  ```
+  step3: 如果需要传递视图则需要单独为每个视图创建对应的`PlatformViewFactory`并注册.
+ ```Objective-C
+     DemoViewFactory* factory = [[DemoViewFactory alloc]initWithRegistrar:registrar];
+    [registrar registerViewFactory:factory withId:@"flutter.io/batterylevel_view"];
+ ```
+  step4: 实现MethodChannel的注册方法`getPlatformVersion`, `getBatteryLevel`.
+  ```Objective-C 
+  //除了通过`[registrar addMethodCallDelegate:instance channel:channel];`代理方式设置Flutter的回调,还可以使用MethodChannel的bloc回调设置,后面会提到
+  - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+  if ([@"getPlatformVersion" isEqualToString:call.method]) {
+    result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+  } else if ([@"getBatteryLevel" isEqualToString:call.method]) {
+      int batterylevel = (int)[UIDevice currentDevice].batteryLevel;
+      result([NSNumber numberWithInt:batterylevel]);
+  } else {
+    result(FlutterMethodNotImplemented);
+  }
+}
+  ```
+  step5: 实现`PlatformViewFactory`的创建方法.并根据生成的viewId为`PlatformView`创建唯一的channel,通过此channel和flutter通信。
+  ```OBjective-C
+  - (NSObject<FlutterPlatformView>*)createWithFrame:(CGRect)frame
+                                   viewIdentifier:(int64_t)viewId
+                                        arguments:(id _Nullable)args { ...}
+   _channel = [[FlutterMethodChannel alloc]initWithName:channelName binaryMessenger:registrar.messenger codec:[FlutterStandardMethodCodec sharedInstance]];
+  [_channel setMethodCallHandler:^(FlutterMethodCall * _Nonnull call, FlutterResult  _Nonnull result) {
+            if ([call.method isEqualToString:@"nativeToEvalute"] && weakSelf){
+                weakSelf->_view.recieveTextField.text = (NSString*)call.arguments;
+            }
+        }];
+  - (void)clcikSendButton:(UIButton*)btn {
+    [_channel invokeMethod:@"flutterToEvalute" arguments:_view.sendTextField.text];
+}
+  ```
+   
+  小结: Android和iOS的在native端的代码实现基本一致,如下图所示
+  ![14_native_plugin_registrar](14_native_plugin_registrar.png)
 
+## 插件的集中集成方式
+  - 当我们做完 `dart package`或 `dart plugin`之后需要引入到自己的工程中,官方提供了三种方式引入。
+  - 通过 git引入,本地路径引入,获取远程 pub库引入。
+  ![15_flutter_add_to_pub_spec](15_flutter_add_to_pub_spec.png)
 
-## Flutter插件原理篇:
+## 怎样将插件发布到pub库
+ 1. 前置条件: 这里需要使用VPN代理和终端翻墙。实现步骤就不多说了,下面三个网站很多,实际发布时候因各人的本机电脑配置原因会出现各种错误,请参照插件关键步骤.
+ 2. 实现步骤: 按照官网步骤肯定是发布失败的,国内由于政策原因,被墙隔离。不过可以根据官网步骤去创建插件文档。
+Flutter包的官方地址: https://pub.dartlang.org/
+Flutter包的国内镜像地址: https://pub.flutter-io.cn
+Flutter创建基本步骤,官方教程传送门: https://flutterchina.club/developing-packages/
+
+ 3. 发布插件关键步骤
+- 检查插件内容是否正确,编译是否成功
+flutter packages pub publish --dry-run --server={your pub server}
+- 关闭中国区代理
+remove local flutter proxy in /.bash_profile
+export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+- 设置VPN和终端翻墙,确保`curl www.google.com`能成功
+connected VPN
+lantern/ShadowsocksX ....
+set terminal proxy
+export http_proxy & https_proxy
+check domains:
+curl www.google.com
+- 发布packages如果发现地址不对,请手动指定发布服务器.
+publish packages
+flutter packages pub publish --dry-run --server={your pub server}
+注意事项
+中国地区的朋友发布时需要将PUB_HOSTED_URL和FLUTTER_STORAGE_BASE_URL注释掉
+需提前设置好终端的代理，确保能ping www.google.com或者curl www.google.com成功
+发布终端代理时指定发布的服务器为官方服务器[https://pub.dartlang.org], 这一步很关键，如果不指定默认就是https://pub.flutter-io.cn,肯定是推不上去的。
+
+## 参考资料:
+[Flutter plugins官方]https://github.com/flutter/plugins
+[developing-packages](https://flutterchina.club/developing-packages/#types)
 [Flutter Engine]https://github.com/flutter/engine
 [Flutter与Native通信 - PlatformChannel源码分析]https://cloud.tencent.com/developer/article/1366113
 [深入理解Flutter Platform Channel]https://mp.weixin.qq.com/s/FT7UFbee1AtxmKt3iJgvyg
