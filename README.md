@@ -400,19 +400,16 @@ class _MyHomePageState extends State<MyHomePage> {
   ```
 
     - 在./lib/batterylevel.dart.最上面一行使用系统提供的关键字*library*定义该库的名称,注意这里需要与*pubspec.yaml*中插件的名字相同.然后通过 *part [source file]* 和 *part of [library]*关联和库有关的所有文件。他们的使用方式如下:
-    ```dart
-    // 在./lib/src/batterylevel.dart文件中使用  part of batterylevel; 
-    // 在./lib/batterylevel.dart 中使用 part 'src/battery_level.dart';
-    ```
+    * 在./lib/src/batterylevel.dart文件中使用  part of batterylevel; 
+    * 在./lib/batterylevel.dart 中使用 part 'src/battery_level.dart';
     step2: 注册对应的methodChannel和messageCodec指定数据的编解码规则,关于数据编解码一般使用系统默认提供的StandardMessageCodec及可,它可以将基本的数据类型转换为json对象.是一种比较常规的写法.
-    ```dart
+```dart
     static const MethodChannel _channel =
       const MethodChannel("flutter.io/batterylevel");
        static Future<int> get getBatteryLevel async {
       final int batteryLevel = await _channel.invokeMethod('getBatteryLevel');
     return batteryLevel;
-  }
-    ```
+  }```
     step3: 注册对应的ViewType构建方法,同时将获取到的View包装成Flutter端的Widget
     ```dart
     Widget _buildPlatformView(BuildContext context){
@@ -440,7 +437,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
     ```
     step4: 在PlatformView创建完成的回调方法中直根据对应的viewId初始化view绑定的Method渠道.为了将视图和业务逻辑分离,通常的做法是新建一个对应的viewController完成methodChannel的创建以及native方法调用的注册。
-    ```dart
+```dart
 class BatteryLevelViewController {
    StreamController _flutterToEvaluteStream;
    MethodChannel _battery_view_channel; 
