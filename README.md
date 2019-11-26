@@ -4,10 +4,10 @@
 ### [2.Dart Package开发](DartPackage开发)
 ### [3.Flutter Plugin简介](FlutterPlugin简介)
 ### [4.Flutter插件开发](Flutter插件开发)
-### [5 第一阶段:创建FlutterPlugin工程](第一阶段:创建FlutterPlugin工程)
-### [6 第二阶段:编写android端代码](第二阶段:编写android端代码)
-### [7 第三阶段:编写Flutter端代码](第三阶段:编写Flutter端代码)
-### [8 第4阶段:iOS端代码编写](第4阶段:iOS端代码编写)
+### [4.1 第一阶段:创建FlutterPlugin工程](第一阶段_创建FlutterPlugin工程)
+### [4.2 第二阶段:编写android端代码](第二阶段_编写android端代码)
+### [4.3 第三阶段:编写Flutter端代码](第三阶段_编写Flutter端代码)
+### [4.4 第4阶段:iOS端代码编写](第4阶段_iOS端代码编写)
 ### [9. 插件的三种集成方式](插件的三种集成方式)
 ### [10. 怎样将插件发布到pub库](怎样将插件发布到pub库)
 ### [11. 参考资料](参考资料)
@@ -264,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ## Flutter插件开发
 - 目前flutter的生态环境不够完善,官方发的插件库无法覆盖我们所有的业务需求,比如`地图`,`支付`,`音视频`,对国内一些大厂的三方`SDK`支持不够友好,所以在实际开发中可能需要自己开发对应的插件.下面以获取设备信息为例,来创建一个简单的插件.主要分为四个阶段, 创建Flutter Plugin工程, 编写`Android`平台的代码,编写`Flutter`平台的代码, `编写iOS`平台的代码.此外我们还需要对自己创建的插件做一些测试和example的补充,并且附上完成的ReadME.md以及Api文档。
 
-### 第一阶段:创建FlutterPlugin工程
+### 第一阶段_创建FlutterPlugin工程
 - step1: 首先创建插件项目.
   - 这里选择使用代码创建,同样也可以使用`Android Studio`创建,同创建`dart package`类似。
   - `flutter create --template=plugin -i objc -a java batterylevel`,具体参数含义可以在终端通过 flutter help查看,下面是其中几个需要经常用到的参数.
@@ -297,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
 └── test              #插件模块的测试代码文件夹
   ```
 
-### 第二阶段:编写android端代码
+### 第二阶段_编写android端代码
  - step1: 编写对应的bridge方法实现,在`Android Studio`中打开`batterylevel`插件中,找到下面这个文件夹。
       ![5_plugin_android_src](5_plugin_android_src.png)
    - 在`project`模式下我们无法浏览到`src.main`中的文件,需要切换成`Android`的编辑模式.
@@ -388,7 +388,7 @@ class _MyHomePageState extends State<MyHomePage> {
     - 注册对应的MethodChannel用于平台之间的双向通信
     - 如果需要传递视图则需要单独为每个视图创建对应的`PlatformViewFactory`并注册.
 
-### 第三阶段:编写Flutter端代码
+### 第三阶段_编写Flutter端代码
    - step1: 安卓端的代码完成后,开始编写Flutter端的代码。也可以先将android和iOS两个平台的代码写完再写flutter端代码.(不推荐,先保证一个平台能运行起来,便于我们提早发现问题)。
 ```tree
     // 在./lib文件夹下面先创建我们所需要的三个文件
@@ -462,7 +462,7 @@ class BatteryLevelViewController {
     - 注册MethodChannel
     - 注册View构建的Widget
    
-### 第4阶段:iOS端代码编写
+### 第4阶段_iOS端代码编写
  - 整体思路同android写法类似,分为三个步骤
  step1: 注册该Plugin的`registrar`实例,这一步主要创建了BinaryMessage,用于管理该插件的所有通信。在AppDelegate启动时开始注册.
   ```Objective-C 
