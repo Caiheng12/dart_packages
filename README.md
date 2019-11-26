@@ -1,16 +1,16 @@
 # Flutter Package 
 ## 目录
-[1.Flutter依赖包的简介](Flutter依赖包的简介)
-[2.Dart Package开发](Dart Package开发)
-[3.Flutter Plugin简介](Flutter Plugin简介)
-[4.Flutter插件开发](Flutter插件开发)
-[4.1 第一阶段:创建Flutter Plugin工程](第一阶段:创建FlutterPlugin工程)
-[4.2 第二阶段:编写android端代码](第二阶段:编写android端代码)
-[4.3 第三阶段: 编写Flutter端代码](第三阶段:编写Flutter端代码)
-[4.4 第4阶段: iOS端代码编写](第4阶段:iOS端代码编写)
-[5. 插件的集中集成方式](插件的集中集成方式)
-[6. 怎样将插件发布到pub库](怎样将插件发布到pub库)
-[7. 参考资料](参考资料)
+### [1.Flutter依赖包的简介](Flutter依赖包的简介)
+### [2.Dart Package开发](DartPackage开发)
+### [3.Flutter Plugin简介](FlutterPlugin简介)
+### [4.Flutter插件开发](Flutter插件开发)
+### [4.1 第一阶段:创建Flutter Plugin工程](第一阶段:创建FlutterPlugin工程)
+### [4.2 第二阶段:编写android端代码](第二阶段:编写android端代码)
+### [4.3 第三阶段: 编写Flutter端代码](第三阶段:编写Flutter端代码)
+### [4.4 第4阶段: iOS端代码编写](第4阶段:iOS端代码编写)
+### [5. 插件的三种集成方式](插件的三种集成方式)
+### [6. 怎样将插件发布到pub库](怎样将插件发布到pub库)
+### [7. 参考资料](参考资料)
 
 ## Flutter依赖包的简介
 - 它属于一个单独的功能模块,可以同其它语言一样,如C++的dll,iOS使用的framework,android使用的jar包,npm包,等等这些都属于一种外置的依赖包,他们作为一个独立的工程模块可以在多个应用中使用,flutter也是一样,官方也提供了相应的依赖包,需在flutter工程内的`pubspec.yaml`添加相应的依赖包的配置文件引入。
@@ -23,7 +23,7 @@
 
 - 下面开始本章节的具体内容,先给自己定一个小目标,开发一个简单的`dart package`并集成到Demo中.在做demo之前请确保你的电脑已经安装好了`Flutter`、`Android`、`iOS`开发环境。
 
-## Dart Package开发
+## DartPackage开发
 - step1: 创建包,可以通过命令创建和使用IDE工具创建。
   - 代码创建方式如下: 
     - `flutter create --template=package [your package name]` 
@@ -191,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
   - 附上一张效果图:
   ![4_pacakge_result_ui](4_pacakge_result_ui.png)
 
- ## 目前项目中使用的package有哪些?
+#### 目前项目中使用的package有哪些?
   - 按照功能来划分目前主要有以下几类。
    - genernal
   ```yaml
@@ -223,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ├── json_annotation  #json数据解析
 ```
 
-## Flutter Plugin简介
+## FlutterPlugin简介
 - Flutter插件通信,主要是通过 platform channel机制来进行通信的,通过 FlutterEngine将dart侧消息编码封装成不同的 platformMessage传递给相应的平台.平台接受到消息,利用相信的MessageCodec对数据进行编解码,再将新的消息通过FlutterEngine返回给dart端。
 
 - 再开发之前我们需了解一些基本概念,下面是dart端插件对应的api接口类
@@ -528,7 +528,7 @@ class BatteryLevelViewController {
   小结: Android和iOS的在native端的代码实现基本一致,如下图所示
   ![14_native_plugin_registrar](14_native_plugin_registrar.png)
 
-## 插件的集中集成方式
+## 插件的三种集成方式
   - 当我们做完 `dart package`或 `dart plugin`之后需要引入到自己的工程中,官方提供了三种方式引入。
   - 通过 git引入,本地路径引入,获取远程 pub库引入。
   ![15_flutter_add_to_pub_spec](15_flutter_add_to_pub_spec.png)
