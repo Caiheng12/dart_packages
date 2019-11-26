@@ -390,20 +390,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### 第三阶段_编写Flutter端代码
    - step1: 安卓端的代码完成后,开始编写Flutter端的代码。也可以先将android和iOS两个平台的代码写完再写flutter端代码.(不推荐,先保证一个平台能运行起来,便于我们提早发现问题)。
-```tree
+  ```dart
     // 在./lib文件夹下面先创建我们所需要的三个文件
 ├── batterylevel.dart.  //interface文件,用于暴露该插件的所有公开的方法和类
 └── src
     ├── battery_level.dart   //用于获取native端的电量信息
     ├── battery_level_view.dart  //用于获取native端的视图并包裹成一个flutter端的Widget
     └── battery_level_view_controller.dart //用于控制和native端视图的通信
+    //在./lib/batterylevel.dart.最上面一行使用系统提供的关键字library 定义该库的名称,注意这里需要与pubspec.yaml中插件的名字相同.然后通过 part [source file] 和 part of [library]关联和库有关的所有文件。他们的使用方式如下:
+    //在./lib/src/batterylevel.dart文件中使用  part of batterylevel; 
+    //在./lib/batterylevel.dart 中使用 part 'src/battery_level.dart';
   ```
 
-    - 在./lib/batterylevel.dart.最上面一行使用系统提供的关键字*library*定义该库的名称,注意这里需要与*pubspec.yaml*中插件的名字相同.然后通过 *part [source file]* 和 *part of [library]*关联和库有关的所有文件。他们的使用方式如下:
-    * 在./lib/src/batterylevel.dart文件中使用  part of batterylevel; 
-    * 在./lib/batterylevel.dart 中使用 part 'src/battery_level.dart';
-    step2: 注册对应的methodChannel和messageCodec指定数据的编解码规则,关于数据编解码一般使用系统默认提供的StandardMessageCodec及可,它可以将基本的数据类型转换为json对象.是一种比较常规的写法.
-```dart
+
+
+   - step2: 注册对应的methodChannel和messageCodec指定数据的编解码规则,关于数据编解码一般使用系统默认提供的StandardMessageCodec及可,它可以将基本的数据类型转换为json对象.是一种比较常规的写法.
+  ```dart
     static const MethodChannel _channel =
       const MethodChannel("flutter.io/batterylevel");
        static Future<int> get getBatteryLevel async {
@@ -437,7 +439,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
     ```
     step4: 在PlatformView创建完成的回调方法中直根据对应的viewId初始化view绑定的Method渠道.为了将视图和业务逻辑分离,通常的做法是新建一个对应的viewController完成methodChannel的创建以及native方法调用的注册。
-```dart
+  ```dart
 class BatteryLevelViewController {
    StreamController _flutterToEvaluteStream;
    MethodChannel _battery_view_channel; 
@@ -454,7 +456,7 @@ class BatteryLevelViewController {
     ```
     step5: 到这一步我们的插件对应android平台的代码已经完成,可以在demo中运行看下效果。
     ![10_flutter_android_review](10_flutter_android_review.png)
-    小结: 
+    小结 
     - 注册MethodChannel
     - 注册View构建的Widget
    
