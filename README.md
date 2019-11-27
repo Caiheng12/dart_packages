@@ -567,10 +567,10 @@ flutter packages pub publish --dry-run --server={your pub server}
 发布终端代理时指定发布的服务器为官方服务器[https://pub.dartlang.org], 这一步很关键，如果不指定默认就是https://pub.flutter-io.cn,肯定是推不上去的。
 
 ## 参考资料:
-[Flutter plugins官方]https://github.com/flutter/plugins
-[developing-packages](https://flutterchina.club/developing-packages/#types)
-[Flutter Engine]https://github.com/flutter/engine
-[Flutter与Native通信 - PlatformChannel源码分析]https://cloud.tencent.com/developer/article/1366113
-[深入理解Flutter Platform Channel]https://mp.weixin.qq.com/s/FT7UFbee1AtxmKt3iJgvyg
-[awesome-flutter](https://github.com/Solido/awesome-flutter)
-[Flutter Plugins]([Flutter官方插件](https://github.com/flutter/plugins/tree/master/packages))
+- [Flutter plugins官方](https://github.com/flutter/plugins)
+- [developing-packages](https://flutterchina.club/developing-packages/#types)
+- [Flutter Engine](https://github.com/flutter/engine)
+- [Flutter与Native通信 - PlatformChannel源码分析](https://cloud.tencent.com/developer/article/1366113)
+- [深入理解Flutter Platform Channel](https://mp.weixin.qq.com/s/FT7UFbee1AtxmKt3iJgvyg)
+- [awesome-flutter](https://github.com/Solido/awesome-flutter)
+- [Flutter Plugins](https://github.com/flutter/plugins/tree/master/packages)
