@@ -77,5 +77,6 @@ class _BatterLevelViewState extends State<BatterLevelView> {
   void onPlatformViewCreated(int viewId) { 
      _controller = BatteryLevelViewController(viewId: viewId, flutterToEvaluteStream: _flutterToEvaluteStream);
      _controller.bindNativeMethodCallBackHandler();
+     _controller.listentNativeContinuesEvents();
   }
 }

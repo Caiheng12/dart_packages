@@ -35,6 +35,9 @@ class _MyAppState extends State<MyApp> {
       _flutterToEvaluteStream = StreamController();
      _subscription = _flutterToEvaluteStream.stream.listen((natvieText){
        setState(() {
+        //  if (natvieText == "clicked eventSink button") {
+
+        //  }
          _textEditRecieveNative.text = natvieText;
        });
     });
@@ -152,8 +155,10 @@ class _MyAppState extends State<MyApp> {
                ),
                FlatButton(
                     color: Colors.blue,
-                    child: Text("开始接收Native的信息", overflow: TextOverflow.fade, softWrap: true, textAlign: TextAlign.center,), 
-                  onPressed: (){ },
+                    child: Text("已开启native event sink广播", overflow: TextOverflow.fade, softWrap: true, textAlign: TextAlign.center,), 
+                  onPressed: (){
+                    //关闭或打开 EventChannel的订阅同时修改button文字
+                   },
              ),
             ],
           ),

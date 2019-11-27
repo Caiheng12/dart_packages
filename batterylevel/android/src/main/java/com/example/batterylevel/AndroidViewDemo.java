@@ -13,6 +13,9 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.EventChannel.EventSink;
+import io.flutter.plugin.common.EventChannel.StreamHandler;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -20,15 +23,17 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.platform.PlatformView;
 
-public class AndroidViewDemo implements PlatformView, MethodCallHandler {
+public class AndroidViewDemo implements PlatformView, MethodCallHandler, StreamHandler {
 
     private BinaryMessenger  binaryMessenger;
     private View view = null;
     private EditText recieveText = null;
     private TextView sendText = null;
-    private Button recieveButton = null;
+    private Button sendEventButton = null;
     private Button sendButton = null;
     private MethodChannel methodChannel;
+    private EventSink eventSink = null;
+    private EventChannel eventChannel = null;
 
     public AndroidViewDemo(int viewId,
                        BinaryMessenger messenger,
@@ -37,7 +42,8 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler {
         this.binaryMessenger = messenger;
         this.methodChannel = new MethodChannel(binaryMessenger, Constant.PLUGIN_PLAT_FORM_BASIC_VIEW_NAME + "_" + viewId);
         this.methodChannel.setMethodCallHandler(this);
-
+        this.eventChannel = new EventChannel(binaryMessenger, "flutter.io/batterylevel_view_event_" + viewId);
+        this.eventChannel.setStreamHandler(this);
         setupViews(registrar);
     }
 
@@ -100,11 +106,13 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler {
 
         recieveText = view.findViewById(R.id.recieveEditText);
         recieveText.setHint("please in put text send to flutter");
-        recieveButton = view.findViewById(R.id.recieveButton);
-        recieveButton.setOnClickListener(new View.OnClickListener() {
+        sendEventButton = view.findViewById(R.id.recieveButton);
+        sendEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (eventSink != null){
+                    eventSink.success("clicked eventSink button");
+                }
             }
         });
 
@@ -133,10 +141,20 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler {
 
     @Override
     public void dispose() {
+        eventSink = null;
+        eventChannel.setStreamHandler(null);
         methodChannel.setMethodCallHandler(null);
     }
 
+    @Override
+    public void onListen(Object o, EventSink eventSink) {
+        this.eventSink = eventSink;
+    }
 
+    @Override
+    public void onCancel(Object o) {
+        eventSink = null;
+    }
 }
 
 //TextField edit event monitor
