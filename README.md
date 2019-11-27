@@ -28,8 +28,8 @@
   - 代码创建方式如下: 
     - `flutter create --template=package [your package name]` 
   - 通过Android Studio工具的图形化命令创建。
-    ![1_create_flutter_project](1_create_flutter_project)
-    ![2_create_flutter_package](2_create_flutter_package)
+    ![1_create_flutter_project](1_create_flutter_project.png)
+    ![2_create_flutter_package](2_create_flutter_package.png)
   - 需要注意`包名需使用英文小写`,可以使用`_`分开.如`caculator_package`
 
 - step2: 创建完成后,进入到创建的工程目录中.
@@ -137,7 +137,7 @@ class Calculator {
   step4: 创建一个demo工程用于
   - 这里和创建包类似,同样可以使用`Android Studio`或`flutter command`创建,这里使用命令创建。
   - 终端运行`flutter create --template=app package_demo`,也可以直接使用`flutter create package_demo`创建。
-  	```yaml
+```yaml
 ├── README.md
 ├── android
 ├── ios
@@ -146,7 +146,7 @@ class Calculator {
 ├── pubspec.lock
 ├── pubspec.yaml
 └── test
-  	```
+```
   step5: 这里先介绍通过本地路径引入我们前面开发的`caculator_package`到`package_demo`工程中.
   - 将我们`caculator_package`拷贝到该demo工程的目录下.这里我新建了一个tools文件夹.
   step6: 进入到`pubspec.yaml`文件中,引入该包。
@@ -189,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ```
   step8: 运行我们的demo工程,点击加号按钮,可以看到数字增加,说明我们的dart包成功运行了。
   - 附上一张效果图:
-  ![4_pacakge_result_ui](4_pacakge_result_ui)
+  ![4_pacakge_result_ui](4_pacakge_result_ui.png)
 
 #### 目前项目中使用的package有哪些?
   - 按照功能来划分目前主要有以下几类。
@@ -235,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ├── binary_messenger.dart。 将数据进行封装,传递给对应平台的底层接口
 ```
 主要类之间的关如下:
-![12_flutter_plugin_classes](12_flutter_plugin_classes)
+![12_flutter_plugin_classes](12_flutter_plugin_classes.png)
 - BasicMessageChannel: 主要用于传递基本的消息类型,它不能显示的指定方法名,数据格式较为单一,不太适合直接使用与复杂的业务逻辑。是用此类时通常需要自己定义对messageCodec,自定义消息格式.
 - MethodChannel: 支持方法传递,自带基本的数据类编解码,使用简单。
 - OptionalMethodChannel: 和MethodChannel基本一致,native端未实现对应的注册方法时不会抛出异常
@@ -258,7 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const int _valueMap = 13;
 ```
 了解上面的几个基本类之后,再看下面的通信过程就比较容易理解了。
-![11_flutter_plugin_communication](11_flutter_plugin_communication)
+![11_flutter_plugin_communication](11_flutter_plugin_communication.png)
  
 
 ## Flutter插件开发
@@ -299,12 +299,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### 第二阶段_编写android端代码
  - step1: 编写对应的bridge方法实现,在`Android Studio`中打开`batterylevel`插件中,找到下面这个文件夹。
-      ![5_plugin_android_src](5_plugin_android_src)
+      ![5_plugin_android_src](5_plugin_android_src.png)
    - 在`project`模式下我们无法浏览到`src.main`中的文件,需要切换成`Android`的编辑模式.
-      ![6_plugin_android_src_edit](6_plugin_android_src_edit)
+      ![6_plugin_android_src_edit](6_plugin_android_src_edit.png)
    - 切换之后可以到如下三个`target`,最上面一个`batterylevel`和我们创建的插件名字一样,他是`flutter target`,然后是`batterylevel_android`是插件对应的`android`端的代码,最后一个是`battery_example_android`他是用于调试此插件的demo工程.
    - 按如图所示,设置`batterylevel_android`和`battery_example_android` target的 sdk版本,这样就不会有编译警告了。
-      ![7_plugin_android_content](7_plugin_android_content)
+      ![7_plugin_android_content](7_plugin_android_content.png)
    - 首先进入到`BatterylevelPlugin`中,编写`android`端获取设备电量信息的详细代码
 ```java
      private int getBatteryLevel() {
@@ -389,7 +389,7 @@ class _MyHomePageState extends State<MyHomePage> {
     - 注册对应的MethodChannel用于平台之间的双向通信
     - 如果需要传递视图则需要单独为每个视图创建对应的`PlatformViewFactory`并注册.
     效果图:
-    ![10_flutter_android_review](10_flutter_android_review)
+    ![10_flutter_android_review](10_flutter_android_review.png)
 
 ### 第三阶段_编写Flutter端代码
    - step1: 安卓端的代码完成后,开始编写Flutter端的代码。也可以先将android和iOS两个平台的代码写完再写flutter端代码.(不推荐,先保证一个平台能运行起来,便于我们提早发现问题)。
@@ -456,7 +456,7 @@ class _MyHomePageState extends State<MyHomePage> {
    }
 ```
    - step5: 到这一步我们的插件对应android平台的代码已经完成,可以在demo中运行看下效果。
-    ![10_flutter_android_review](10_flutter_android_review)
+    ![10_flutter_android_review](10_flutter_android_review.png)
     小结 
     - 注册MethodChannel
     - 注册View构建的Widget
@@ -530,12 +530,12 @@ class _MyHomePageState extends State<MyHomePage> {
  ```
    
   小结: Android和iOS的在native端的代码实现基本一致,如下图所示
-  ![14_native_plugin_registrar](14_native_plugin_registrar)
+  ![14_native_plugin_registrar](14_native_plugin_registrar.png)
 
 ## 插件的三种集成方式
   - 当我们做完 `dart package`或 `dart plugin`之后需要引入到自己的工程中,官方提供了三种方式引入。
   - 通过 git引入,本地路径引入,获取远程 pub库引入。
-  ![15_flutter_add_to_pub_spec](15_flutter_add_to_pub_spec)
+  ![15_flutter_add_to_pub_spec](15_flutter_add_to_pub_spec.png)
 
 ## 怎样将插件发布到pub库
  1. 前置条件: 这里需要使用VPN代理和终端翻墙。实现步骤就不多说了,下面三个网站很多,实际发布时候因各人的本机电脑配置原因会出现各种错误,请参照插件关键步骤.
