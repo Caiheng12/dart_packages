@@ -8,9 +8,9 @@
 ### [4.2 第二阶段:编写android端代码](#第二阶段_编写android端代码)
 ### [4.3 第三阶段:编写Flutter端代码](#第三阶段_编写Flutter端代码)
 ### [4.4 第4阶段:iOS端代码编写](#第4阶段_iOS端代码编写)
-### [9. 插件的三种集成方式](#插件的三种集成方式)
-### [10. 怎样将插件发布到pub库](#怎样将插件发布到pub库)
-### [11. 参考资料](#参考资料)
+### [5. 插件的三种集成方式](#插件的三种集成方式)
+### [6. 怎样将插件发布到pub库](#怎样将插件发布到pub库)
+### [7. 参考资料](#参考资料)
 
 ## Flutter依赖包的简介
 - 它属于一个单独的功能模块,可以同其它语言一样,如C++的dll,iOS使用的framework,android使用的jar包,npm包,等等这些都属于一种外置的依赖包,他们作为一个独立的工程模块可以在多个应用中使用,flutter也是一样,官方也提供了相应的依赖包,需在flutter工程内的`pubspec.yaml`添加相应的依赖包的配置文件引入。
@@ -306,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
    - 按如图所示,设置`batterylevel_android`和`battery_example_android` target的 sdk版本,这样就不会有编译警告了。
       ![7_plugin_android_content](7_plugin_android_content.png)
    - 首先进入到`BatterylevelPlugin`中,编写`android`端获取设备电量信息的详细代码
-   ```java
+```java
      private int getBatteryLevel() {
     int batteryLevel = -1;
     if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
@@ -324,7 +324,7 @@ class _MyHomePageState extends State<MyHomePage> {
  - step2: 注册插件
    1. 应用启动后会进入到`MainActivity`的`onCreate`方法中,
    2. 然后开始调用`GeneratedPluginRegistrant`的`registerWith`方法,开始注册插件.这个类是系统自动生成的一个中间类,便于管理.传入参数为当前的`MainActivity`用于和插件做数据交互。
-      ```java
+```java
       public class MainActivity extends FlutterActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -333,9 +333,9 @@ class _MyHomePageState extends State<MyHomePage> {
     GeneratedPluginRegistrant.registerWith(this);
   }
 }
-      ```
+```
    3. `GeneratedPluginRegistrant`的主要作用就是为各个插件管理提供一个统一的注册入口, 因为一个项目会有多个插件,为了便于统一管理,系统每次都会生成此中间类。
-    ```java
+```java
     public final class GeneratedPluginRegistrant {
   public static void registerWith(PluginRegistry registry) {
     if (alreadyRegisteredWith(registry)) {
@@ -345,9 +345,10 @@ class _MyHomePageState extends State<MyHomePage> {
     PluginB.registrarFor("com.example.amap_atlas.AmapAtlasPlugin"));
     .....
   }
-    ```
+```
    4. 接下来进入到我们的其中一个插件`BatterylevelPlugin`,进到插件的具体实现方法中,每个插件中至少需要绑定一个MethodChannel.如果是需要传递视图的插件,还需要注册对应的PlatformViewFactory实例.
-   ```java
+   
+```java
   public static void registerWith(Registrar registrar) {
       //step1: 注册MethodChannel用于和flutter通信, `registrar.messenger()`为MainActivity中绑定的BannaryMessager,name为对应的渠道标示。
     final MethodChannel battery_channel = new MethodChannel(registrar.messenger(), "batterylevel_channel");
@@ -358,7 +359,7 @@ class _MyHomePageState extends State<MyHomePage> {
       //step3: 注册ViewFactory,用于接受来自flutter端的构造视图的指令
     registrar.platformViewRegistry().registerViewFactory("batterylevel_view", new AndroidViewFactory(registrar, registrar.messenger()));
   }
-   ```
+```
    5. 如果需要向Flutter端传递视图,则需要额外的注入`PlatformViewFactory`实例到`registrar`中,这样flutter端在根据对应的`ViewType`查找到对应的`ViewFactory`构造相应的视图,再通过registrar.messenger()传递到flutter端。每个`PlatformViewFactory`必须要实现 MessageCodec和PlatformView构建方法。
    ```java
     super(StandardMessageCodec.INSTANCE);
@@ -387,33 +388,33 @@ class _MyHomePageState extends State<MyHomePage> {
     - 注册该Plugin的`registrar`实例,这一步主要创建了BinaryMessage,用于管理该插件的所有通信。
     - 注册对应的MethodChannel用于平台之间的双向通信
     - 如果需要传递视图则需要单独为每个视图创建对应的`PlatformViewFactory`并注册.
+    效果图:
+    ![10_flutter_android_review](10_flutter_android_review)
 
 ### 第三阶段_编写Flutter端代码
    - step1: 安卓端的代码完成后,开始编写Flutter端的代码。也可以先将android和iOS两个平台的代码写完再写flutter端代码.(不推荐,先保证一个平台能运行起来,便于我们提早发现问题)。
-  ```dart
-    // 在./lib文件夹下面先创建我们所需要的三个文件
-├── batterylevel.dart.  //interface文件,用于暴露该插件的所有公开的方法和类
-└── src
+   
+```yaml
+    ├── batterylevel.dart.  //interface文件,用于暴露该插件的所有公开的方法和类
+    └── src
     ├── battery_level.dart   //用于获取native端的电量信息
     ├── battery_level_view.dart  //用于获取native端的视图并包裹成一个flutter端的Widget
-    └── battery_level_view_controller.dart //用于控制和native端视图的通信
-    //在./lib/batterylevel.dart.最上面一行使用系统提供的关键字library 定义该库的名称,注意这里需要与pubspec.yaml中插件的名字相同.然后通过 part [source file] 和 part of [library]关联和库有关的所有文件。他们的使用方式如下:
+    └── battery_level_view_controller.dart //用于控制和native端视图的通信 
+    // 在./lib文件夹下面先创建我们所需要的三个文件
+    //在./lib/batterylevel.dart.最上面一行使用系统提供的关键字library 定义该库的名称,注意这里需要与pubspec.yaml中插件的名字相同.然后通过 part [source file]和 part of [library]关联和库有关的所有文件。他们的使用方式如下:
     //在./lib/src/batterylevel.dart文件中使用  part of batterylevel; 
     //在./lib/batterylevel.dart 中使用 part 'src/battery_level.dart';
-  ```
-
-
-
+```
    - step2: 注册对应的methodChannel和messageCodec指定数据的编解码规则,关于数据编解码一般使用系统默认提供的StandardMessageCodec及可,它可以将基本的数据类型转换为json对象.是一种比较常规的写法.
-  ```dart
+```dart
     static const MethodChannel _channel =
       const MethodChannel("flutter.io/batterylevel");
        static Future<int> get getBatteryLevel async {
       final int batteryLevel = await _channel.invokeMethod('getBatteryLevel');
     return batteryLevel;
-  }```
-    step3: 注册对应的ViewType构建方法,同时将获取到的View包装成Flutter端的Widget
-    ```dart
+```
+  - step3: 注册对应的ViewType构建方法,同时将获取到的View包装成Flutter端的Widget
+```dart
     Widget _buildPlatformView(BuildContext context){
       if (Platform.isAndroid) {
         return AndroidView(
@@ -437,10 +438,10 @@ class _MyHomePageState extends State<MyHomePage> {
         return Container();
       }
   }
-    ```
-    step4: 在PlatformView创建完成的回调方法中直根据对应的viewId初始化view绑定的Method渠道.为了将视图和业务逻辑分离,通常的做法是新建一个对应的viewController完成methodChannel的创建以及native方法调用的注册。
-  ```dart
-class BatteryLevelViewController {
+```
+  step4: 在PlatformView创建完成的回调方法中直根据对应的viewId初始化view绑定的Method渠道.为了将视图和业务逻辑分离,通常的做法是新建一个对应的viewController完成methodChannel的创建以及native方法调用的注册。
+```dart
+    class BatteryLevelViewController {
    StreamController _flutterToEvaluteStream;
    MethodChannel _battery_view_channel; 
    BatteryLevelViewController({@required int viewId, StreamController flutterToEvaluteStream})
@@ -453,8 +454,8 @@ class BatteryLevelViewController {
    void bindNativeMethodCallBackHandler() {
       _battery_view_channel.setMethodCallHandler(this._handler);
    }
-    ```
-    step5: 到这一步我们的插件对应android平台的代码已经完成,可以在demo中运行看下效果。
+```
+   - step5: 到这一步我们的插件对应android平台的代码已经完成,可以在demo中运行看下效果。
     ![10_flutter_android_review](10_flutter_android_review.png)
     小结 
     - 注册MethodChannel
@@ -522,6 +523,11 @@ class BatteryLevelViewController {
     [_channel invokeMethod:@"flutterToEvalute" arguments:_view.sendTextField.text];
 }
   ```
+  step6: 注意事项,在使用该插件时，需要在iOS target中的`info.plist`添加视图的支持.
+  ```plist
+  <key>io.flutter.embedded_views_preview</key>
+  <true/>
+ ```
    
   小结: Android和iOS的在native端的代码实现基本一致,如下图所示
   ![14_native_plugin_registrar](14_native_plugin_registrar.png)
