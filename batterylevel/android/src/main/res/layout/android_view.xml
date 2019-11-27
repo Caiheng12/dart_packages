@@ -8,21 +8,20 @@
     android:background="@color/colorGray300"
     >
 
-    <EditText
+    <TextView
         android:id="@+id/sendEditText"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:background="@color/colorYellow"
-        android:ems="0"
-        android:inputType="textPersonName"
-        android:text="sendText"
-        android:textSize="12sp"
-        android:hint="please input "
-        android:tooltipText="@string/sendEditHit"
+        android:inputType="text"
+        android:text="text send to flutter"
+        android:textColor="#030303"
+        android:textSize="12dp"
+        tools:text="text send to flutter"
         tools:visibility="visible" />
 
     <Button

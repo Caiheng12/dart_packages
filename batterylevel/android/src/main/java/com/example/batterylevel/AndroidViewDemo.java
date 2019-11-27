@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
@@ -24,7 +25,7 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler {
     private BinaryMessenger  binaryMessenger;
     private View view = null;
     private EditText recieveText = null;
-    private EditText sendText = null;
+    private TextView sendText = null;
     private Button recieveButton = null;
     private Button sendButton = null;
     private MethodChannel methodChannel;
@@ -53,7 +54,7 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler {
     private void setupViews(final Registrar registrar) {
 
         view = (View) LayoutInflater.from(registrar.activity()).inflate(R.layout.android_view, null);
-        sendText = view.findViewById(R.id.sendEditText);
+        sendText = (TextView)view.findViewById(R.id.sendEditText);
         sendText.setHint("please in put text send to flutter");
         sendText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,13 +93,14 @@ public class AndroidViewDemo implements PlatformView, MethodCallHandler {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                methodChannel.invokeMethod("flutterToEvalute", sendText.getText());
+                String text = sendText.getText().toString();
+                methodChannel.invokeMethod("flutterToEvalute", text);
             }
         });
 
         recieveText = view.findViewById(R.id.recieveEditText);
         recieveText.setHint("please in put text send to flutter");
-        recieveButton = view.findViewById(R.id.sendButton);
+        recieveButton = view.findViewById(R.id.recieveButton);
         recieveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
