@@ -573,3 +573,4 @@ flutter packages pub publish --dry-run --server={your pub server}
 [Flutter与Native通信 - PlatformChannel源码分析]https://cloud.tencent.com/developer/article/1366113
 [深入理解Flutter Platform Channel]https://mp.weixin.qq.com/s/FT7UFbee1AtxmKt3iJgvyg
 [awesome-flutter](https://github.com/Solido/awesome-flutter)
+[Flutter Plugins]([Flutter官方插件](https://github.com/flutter/plugins/tree/master/packages))
