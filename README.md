@@ -299,7 +299,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ### 第二阶段_编写android端代码
  - step1: 编写对应的bridge方法实现,在`Android Studio`中打开`batterylevel`插件中,找到下面这个文件夹。
-      ![5_plugin_android_src](5_plugin_android_src.png)
+      ![5_plugin_android_src](5_plugin_android_src)
    - 在`project`模式下我们无法浏览到`src.main`中的文件,需要切换成`Android`的编辑模式.
       ![6_plugin_android_src_edit](6_plugin_android_src_edit.png)
    - 切换之后可以到如下三个`target`,最上面一个`batterylevel`和我们创建的插件名字一样,他是`flutter target`,然后是`batterylevel_android`是插件对应的`android`端的代码,最后一个是`battery_example_android`他是用于调试此插件的demo工程.
