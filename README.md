@@ -3,11 +3,11 @@
 ### [1.Flutter依赖包的简介](#Flutter依赖包的简介)
 ### [2.Dart Package开发](#DartPackage开发)
 ### [3.Flutter Plugin简介](#FlutterPlugin简介)
-### [4.Flutter插件开发](#Flutter插件开发)
+### [4.Flutter Plugin开发](#FlutterPlugin开发)
 ### [4.1 第一阶段:创建FlutterPlugin工程](#第一阶段_创建FlutterPlugin工程)
 ### [4.2 第二阶段:编写android端代码](#第二阶段_编写android端代码)
 ### [4.3 第三阶段:编写Flutter端代码](#第三阶段_编写Flutter端代码)
-### [4.4 第4阶段:iOS端代码编写](#第4阶段_iOS端代码编写)
+### [4.4 第四阶段:iOS端代码编写](#第4阶段_iOS端代码编写)
 ### [5. 插件的三种集成方式](#插件的三种集成方式)
 ### [6. 怎样将插件发布到pub库](#怎样将插件发布到pub库)
 ### [7. 参考资料](#参考资料)
@@ -15,7 +15,7 @@
 ## Flutter依赖包的简介
 - 它属于一个单独的功能模块,可以同其它语言一样,如C++的dll,iOS使用的framework,android使用的jar包,npm包,等等这些都属于一种外置的依赖包,他们作为一个独立的工程模块可以在多个应用中使用,flutter也是一样,官方也提供了相应的依赖包,需在flutter工程内的`pubspec.yaml`添加相应的依赖包的配置文件引入。
 
-- 从依赖包的结构上划分,Flutter总共有2种外置的依赖包.分别是`dart package`和`plugin package`, 其中`dart package`采用纯dart语言进行开发,他只包含flutter平台的代码。`plugin package`包含了三个平台代码,分别是`flutter`,`Android`,`iOS`,所以下开发插件包之前我们需要具备一些移动端的基础的知识,这里推荐几个传送门。
+-  Flutter总共有2种外置的依赖包.分别是`dart package`和`plugin package`, 其中`dart package`采用纯dart语言进行开发,他只包含flutter平台的代码。`plugin package`包含了三个平台代码,分别是`flutter`,`Android`,`iOS`,所以在开发插件包之前我们需要具备一些移动端的基础的知识,这里推荐几个传送门。
 [awesome-ios](https://github.com/vsouza/awesome-ios)
 [iOS官网](https://developer.apple.com/)   
 [Android-Tips](https://github.com/tangqi92/Android-Tips) 
@@ -24,10 +24,10 @@
 - 下面开始本章节的具体内容,先给自己定一个小目标,开发一个简单的`dart package`并集成到Demo中.在做demo之前请确保你的电脑已经安装好了`Flutter`、`Android`、`iOS`开发环境。
 
 ## DartPackage开发
-- step1: 创建包,可以通过命令创建和使用IDE工具创建。
-  - 代码创建方式如下: 
+- step1: Dart Package可以通过命令创建和使用IDE工具创建。
+  - 通过flutter命令行工具创建: 
     - `flutter create --template=package [your package name]` 
-  - 通过Android Studio工具的图形化命令创建。
+  - 通过Android Studio创建：
     ![1_create_flutter_project](1_create_flutter_project.png)
     ![2_create_flutter_package](2_create_flutter_package.png)
   - 需要注意`包名需使用英文小写`,可以使用`_`分开.如`caculator_package`
@@ -131,7 +131,7 @@ class Calculator {
   - 在`lib/caculator_package.dart`文件中使用`library [package name]定义`该`dart package`的名字.
   - 在`lib/src/caculator.dart`文件中`part of [package name]`表示该文件属于package的一部分,
   - 在`src/caculator_package.dart`文件中使用`part 'src/caculator'`将文件与库关联在一起。
-  - 这里用到了几个系统的关键字`part of [pacakge name]` 和 `part [source file path]`需配套使用。
+  - 这里用到了几个系统的关键字`part of [pacakge name]` 和 `part [source file path]`需配套使用,除了使用part关键字关联库文件之外,也可以使用`export`关键字将src文件夹下面的文件导出到`lib/caculator_package.dart`文件中,在该文件的顶部写入 `export 'src/{your src dart files}'`
   step4: 编写对应测试unit
   - 进入到`test`文件夹中,编写测试代码,以`function`为单位,如果有`case`或者`if else`的分支则需将test case再进行细分.
   step4: 创建一个demo工程用于
@@ -168,7 +168,7 @@ dependencies:
   step7: 设置完`pubspec.yaml`之后,需要从新更新工程的依赖包
   - 执行`flutter package get`更新依赖包。
   - 下载完成后依赖包会出现在工程中的`dependency`栏目下.如图,我使用的是VSCode,界面如下:
-  ![3_package_dependency](3_package_dependency)
+  ![3_package_dependency](3_package_dependency.png)
   step8: 到这一步我们就已经把创建的package成功的集成到我们的demo工程中了,下面可以愉快的进行开发了。
   - 在`lib/main.dart`中导入`import 'package:caculator_package/caculator_package.dart';`
   - 使用package定义的function
@@ -193,7 +193,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
 #### 目前项目中使用的package有哪些?
   - 按照功能来划分目前主要有以下几类。
-   - genernal
   ```yaml
 ├── china_features
 │   ├── coopers
@@ -234,13 +233,13 @@ class _MyHomePageState extends State<MyHomePage> {
 ├── platform_views.dart。定义来系统view默认的platformChannels和手势点击事件的交互
 ├── binary_messenger.dart。 将数据进行封装,传递给对应平台的底层接口
 ```
-主要类之间的关如下:
+- 主要类之间的关如下:
 ![12_flutter_plugin_classes](12_flutter_plugin_classes.png)
-- BasicMessageChannel: 主要用于传递基本的消息类型,它不能显示的指定方法名,数据格式较为单一,不太适合直接使用与复杂的业务逻辑。是用此类时通常需要自己定义对messageCodec,自定义消息格式.
-- MethodChannel: 支持方法传递,自带基本的数据类编解码,使用简单。
-- OptionalMethodChannel: 和MethodChannel基本一致,native端未实现对应的注册方法时不会抛出异常
-- EventChannel: 和MethodChannel类型,不过事件传递是基于广播的方式传递的,他会把方法指针传递到native端,native端实时调用,一般用于持续行的UI事件交互,这样就不用平凡的调用methodInvoke方法。
-- MessageCodec及其字类: 数据包装和解析。 其主要是通过传输的二进制中按照规则获取约定的标志位置将数据解析成对应的类型,如下为`StandardMessageCodec`中所定义的数据类型如下,因此他支持了dart所有的基本数据类型解析。
+- `BasicMessageChannel`: 主要用于传递基本的消息类型,它不能显示的指定方法名,数据格式较为单一,不太适合直接使用与复杂的业务逻辑。是用此类时通常需要自己定义对messageCodec,自定义消息格式.
+- `MethodChannel`: 支持方法传递,自带基本的数据类编解码,使用简单。
+- `OptionalMethodChannel`: 和MethodChannel基本一致,native端未实现对应的注册方法时不会抛出异常
+- `EventChannel`: 同MethodChannel类似,它只是订阅了一个广播,其具体实现也是通过`MethodChannel`进行通信的,一般用于持续行的UI事件交互。
+- `MessageCodec及其子类`:  数据包装和解析。 其主要是通过传输的二进制中按照规则获取约定的标志位置将数据解析成对应的类型,如下为`StandardMessageCodec`中所定义的数据类型如下,因此他支持了dart所有的基本数据类型解析。
 ```dart 
   static const int _valueNull = 0;
   static const int _valueTrue = 1;
@@ -261,29 +260,24 @@ class _MyHomePageState extends State<MyHomePage> {
 ![11_flutter_plugin_communication](11_flutter_plugin_communication.png)
  
 
-## Flutter插件开发
+## FlutterPlugin开发
 - 目前flutter的生态环境不够完善,官方发的插件库无法覆盖我们所有的业务需求,比如`地图`,`支付`,`音视频`,对国内一些大厂的三方`SDK`支持不够友好,所以在实际开发中可能需要自己开发对应的插件.下面以获取设备信息为例,来创建一个简单的插件.主要分为四个阶段, 创建Flutter Plugin工程, 编写`Android`平台的代码,编写`Flutter`平台的代码, `编写iOS`平台的代码.此外我们还需要对自己创建的插件做一些测试和example的补充,并且附上完成的ReadME.md以及Api文档。
 
 ### 第一阶段_创建FlutterPlugin工程
 - step1: 首先创建插件项目.
   - 这里选择使用代码创建,同样也可以使用`Android Studio`创建,同创建`dart package`类似。
   - `flutter create --template=plugin -i objc -a java batterylevel`,具体参数含义可以在终端通过 flutter help查看,下面是其中几个需要经常用到的参数.
-  ```help
--t, --template=<type>          Specify the type of project to create.
+```help
+-t, --template=<type>  Specify the type of project to create.
           [app]                (default) Generate a Flutter application.
-          [package]            Generate a shareable Flutter project containing
-                               modular Dart code.
-          [plugin]             Generate a shareable Flutter project containing
-                               an API in Dart code with a platform-specific
-                               implementation for Android, for iOS code, or for
-                               both.
+          [package]         Generate a shareable Flutter project containingmodular Dart code.
+          [plugin]          Generate a shareable Flutter project containing an API in Dart code with a platform-specific  implementation for Android, for iOS code, or for  both.
 -i, --ios-language             [objc, swift (default)]
 -a, --android-language         [java, kotlin (default)]
-    --[no-]androidx            Generate a project using the AndroidX support
-                               libraries
-  ```
+--[no-]androidx            Generate a project using the AndroidX supportlibraries
+```
 - step2: 进入到工程目录,首先熟悉各个文件的作用
-  ```tree 
+```tree 
 ├── CHANGELOG.md
 ├── LICENSE
 ├── README.md
@@ -295,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ├── pubspec.lock.     #用于锁定yaml文件解析的配置信息,执行pub get时会从此文件去下载对应的依赖包
 ├── pubspec.yaml      #插件模块的依赖包和资源文件配置信息
 └── test              #插件模块的测试代码文件夹
-  ```
+```
 
 ### 第二阶段_编写android端代码
  - step1: 编写对应的bridge方法实现,在`Android Studio`中打开`batterylevel`插件中,找到下面这个文件夹。
@@ -540,30 +534,33 @@ class _MyHomePageState extends State<MyHomePage> {
 ## 怎样将插件发布到pub库
  1. 前置条件: 这里需要使用VPN代理和终端翻墙。实现步骤就不多说了,下面三个网站很多,实际发布时候因各人的本机电脑配置原因会出现各种错误,请参照插件关键步骤.
  2. 实现步骤: 按照官网步骤肯定是发布失败的,国内由于政策原因,被墙隔离。不过可以根据官网步骤去创建插件文档。
-Flutter包的官方地址: https://pub.dartlang.org/
-Flutter包的国内镜像地址: https://pub.flutter-io.cn
-Flutter创建基本步骤,官方教程传送门: https://flutterchina.club/developing-packages/
+Flutter包的官方地址: [https://pub.dartlang.org/]( https://pub.dartlang.org/)
+Flutter包的国内镜像地址: [https://pub.flutter-io.cn](https://pub.flutter-io.cn)
+Flutter创建基本步骤,官方教程传送门: [https://flutterchina.club/developing-packages/](https://flutterchina.club/developing-packages/)
 
  3. 发布插件关键步骤
 - 检查插件内容是否正确,编译是否成功
 flutter packages pub publish --dry-run --server={your pub server}
 - 关闭中国区代理
 remove local flutter proxy in /.bash_profile
+```sh
 export PUB_HOSTED_URL=https://pub.flutter-io.cn
 export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
-- 设置VPN和终端翻墙,确保`curl www.google.com`能成功
-connected VPN
-lantern/ShadowsocksX ....
-set terminal proxy
+```
+- 设置VPN和终端翻墙,确保`curl www.google.com`能成功,我这里使用的是ShadowsocksX
+- 设置终端代理
 export http_proxy & https_proxy
-check domains:
+- 检查终端代理是否设置成功:
+```sh
 curl www.google.com
+```
 - 发布packages如果发现地址不对,请手动指定发布服务器.
-publish packages
+```sh
 flutter packages pub publish --dry-run --server={your pub server}
+```
 注意事项
 中国地区的朋友发布时需要将PUB_HOSTED_URL和FLUTTER_STORAGE_BASE_URL注释掉
-需提前设置好终端的代理，确保能ping www.google.com或者curl www.google.com成功
+需提前设置好终端的代理，确保`ping www.google.com`或者`curl www.google.com`成功
 发布终端代理时指定发布的服务器为官方服务器[https://pub.dartlang.org], 这一步很关键，如果不指定默认就是https://pub.flutter-io.cn,肯定是推不上去的。
 
 ## 参考资料:
