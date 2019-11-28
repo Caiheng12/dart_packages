@@ -8,18 +8,19 @@
 ### [4.2 第二阶段:编写android端代码](#第二阶段_编写android端代码)
 ### [4.3 第三阶段:编写Flutter端代码](#第三阶段_编写Flutter端代码)
 ### [4.4 第四阶段:iOS端代码编写](#第4阶段_iOS端代码编写)
-### [5. 插件的三种集成方式](#插件的三种集成方式)
-### [6. 怎样将插件发布到pub库](#怎样将插件发布到pub库)
-### [7. 参考资料](#参考资料)
+### [5. 给Plugin添加原生的依赖库](#给Plugin添加原生的依赖库)
+### [6. 插件的三种集成方式](#插件的三种集成方式)
+### [7. 怎样将插件发布到pub库](#怎样将插件发布到pub库)
+### [8. 参考资料](#参考资料)
 
 ## Flutter依赖包的简介
 - 它属于一个单独的功能模块,可以同其它语言一样,如C++的dll,iOS使用的framework,android使用的jar包,npm包,等等这些都属于一种外置的依赖包,他们作为一个独立的工程模块可以在多个应用中使用,flutter也是一样,官方也提供了相应的依赖包,需在flutter工程内的`pubspec.yaml`添加相应的依赖包的配置文件引入。
 
 -  Flutter总共有2种外置的依赖包.分别是`dart package`和`plugin package`, 其中`dart package`采用纯dart语言进行开发,他只包含flutter平台的代码。`plugin package`包含了三个平台代码,分别是`flutter`,`Android`,`iOS`,所以在开发插件包之前我们需要具备一些移动端的基础的知识,这里推荐几个传送门。
-[awesome-ios](https://github.com/vsouza/awesome-ios)
-[iOS官网](https://developer.apple.com/)   
-[Android-Tips](https://github.com/tangqi92/Android-Tips) 
-[Android官网](https://developer.android.google.cn/)
+    - [awesome-ios](https://github.com/vsouza/awesome-ios)
+    - [iOS官网](https://developer.apple.com/)   
+    - [Android-Tips](https://github.com/tangqi92/Android-Tips) 
+    - [Android官网](https://developer.android.google.cn/)
 
 - 下面开始本章节的具体内容,先给自己定一个小目标,开发一个简单的`dart package`并集成到Demo中.在做demo之前请确保你的电脑已经安装好了`Flutter`、`Android`、`iOS`开发环境。
 
@@ -517,7 +518,7 @@ class _MyHomePageState extends State<MyHomePage> {
     [_channel invokeMethod:@"flutterToEvalute" arguments:_view.sendTextField.text];
 }
   ```
-  step6: 注意事项,在使用该插件时，需要在iOS target中的`info.plist`添加视图的支持.
+  step6: 注意事项,在使用该插件时，需要在iOS target中的`info.plist`添加视图的支持,不加这个key视图无法显示出来。
   ```plist
   <key>io.flutter.embedded_views_preview</key>
   <true/>
@@ -525,6 +526,43 @@ class _MyHomePageState extends State<MyHomePage> {
    
   小结: Android和iOS的在native端的代码实现基本一致,如下图所示
   ![14_native_plugin_registrar](14_native_plugin_registrar.png)
+  
+## 给Plugin添加原生的依赖库
+- 在实际开发插件的时候,通常为了将原有的功能快速的移植过来,我们可以在原生的target中添加外置依赖
+- Plugin iOS部分添加依赖库方式如下: 
+   -  在`batterylevel/ios/batterylevel.podspec`文件中可以为iOS工程添加依赖库, 语法格式`s.dependency [ios framework]`
+```pod
+#
+# To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
+#
+Pod::Spec.new do |s|
+s.name             = 'batterylevel'
+s.version          = '0.0.1'
+s.summary          = 'A new flutter plugin project.'
+s.description      = <<-DESC
+A new flutter plugin project.
+DESC
+s.homepage         = 'http://example.com'
+s.license          = { :file => '../LICENSE' }
+s.author           = { 'Your Company' => 'email@example.com' }
+s.source           = { :path => '.' }
+s.source_files = 'Classes/**/*'
+s.public_header_files = 'Classes/**/*.h'
+s.dependency 'Flutter'  
+s.ios.deployment_target = '8.0'
+end
+   ```
+-  Plugin Android部分添加依赖库方式如下:
+  - 在`batterylevel/android/build.gradle`中添加android 的framework依赖
+```gradle
+dependencies {
+implementation 'androidx.gridlayout:gridlayout:1.0.0'
+implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+implementation 'org.jetbrains:annotations-java5:15.0'
+}
+```
+- 请参考官方插件Demo
+  [Flutter Plugins](https://github.com/flutter/plugins/tree/master/packages)
 
 ## 插件的三种集成方式
   - 当我们做完 `dart package`或 `dart plugin`之后需要引入到自己的工程中,官方提供了三种方式引入。
