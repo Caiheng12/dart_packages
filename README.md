@@ -561,9 +561,10 @@ implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 implementation 'org.jetbrains:annotations-java5:15.0'
 }
 ```
-- 请参考官方插件Demo
-  [Flutter Plugins](https://github.com/flutter/plugins/tree/master/packages)
-
+- 请参考以下Demo
+  - [china_amap](https://code.connected.bmw/LongxiangGuo/china_amap)
+  - [Flutter Plugins](https://github.com/flutter/plugins/tree/master/packages)
+  
 ## 插件的三种集成方式
   - 当我们做完 `dart package`或 `dart plugin`之后需要引入到自己的工程中,官方提供了三种方式引入。
   - 通过 git引入,本地路径引入,获取远程 pub库引入。
