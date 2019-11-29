@@ -11,7 +11,8 @@
 ### [5. 给Plugin添加原生的依赖库](#给Plugin添加原生的依赖库)
 ### [6. 插件的三种集成方式](#插件的三种集成方式)
 ### [7. 怎样将插件发布到pub库](#怎样将插件发布到pub库)
-### [8. 参考资料](#参考资料)
+### [8. 多个FlutterPackage版本冲突解决](#多个FlutterPackage版本冲突解决)
+### [9. 参考资料](#参考资料)
 
 ## Flutter依赖包的简介
 - 它属于一个单独的功能模块,可以同其它语言一样,如C++的dll,iOS使用的framework,android使用的jar包,npm包,等等这些都属于一种外置的依赖包,他们作为一个独立的工程模块可以在多个应用中使用,flutter也是一样,官方也提供了相应的依赖包,需在flutter工程内的`pubspec.yaml`添加相应的依赖包的配置文件引入。
@@ -601,6 +602,13 @@ flutter packages pub publish --dry-run --server={your pub server}
 中国地区的朋友发布时需要将PUB_HOSTED_URL和FLUTTER_STORAGE_BASE_URL注释掉
 需提前设置好终端的代理，确保`ping www.google.com`或者`curl www.google.com`成功
 发布终端代理时指定发布的服务器为官方服务器[https://pub.dartlang.org], 这一步很关键，如果不指定默认就是https://pub.flutter-io.cn,肯定是推不上去的。
+
+## 多个FlutterPackage版本冲突解决:
+- 在实际开发中,我们可遇到同一个工程中包括多个`sub packages`，而这个`sub packages`又同时依赖同一个`package`,但是对应不通的版本.解决方案有2种
+- 在`当前应用`或者`sub package`将有冲突的包加上`denpendency_overrides`关键字。
+  ![16_sub_package无override会冲突](16_sub_package无override会冲突)
+  ![17_sub_package有override无冲突](17_sub_package有override无冲突)
+  
 
 ## 参考资料:
 - [Flutter plugins官方](https://github.com/flutter/plugins)
