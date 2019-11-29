@@ -609,6 +609,13 @@ flutter packages pub publish --dry-run --server={your pub server}
   ![16_sub_package无override会冲突](16_sub_package无override会冲突)
   ![17_sub_package有override无冲突](17_sub_package有override无冲突)
   
+- 或者使用模糊的版本号, 让冲突的三方库存在交集，这样系统就不会报错了。
+```yaml
+package1: v1.0.0
+package1: ^v1.0.0
+```
+- 如果以上两种方式都没有,那就只能以其中一个库为准修改另一个库的依赖。
+- 实际开发中,对于经常需要使用的基础库建议采用 `one code base`,定期去合并，避免此类问题。
 
 ## 参考资料:
 - [Flutter plugins官方](https://github.com/flutter/plugins)
