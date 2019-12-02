@@ -606,8 +606,9 @@ flutter packages pub publish --dry-run --server={your pub server}
 ## 多个FlutterPackage版本冲突解决:
 - 在实际开发中,我们可遇到同一个工程中包括多个`sub packages`，而这个`sub packages`又同时依赖同一个`package`,但是对应不通的版本.解决方案有2种
 - 在`当前应用`或者`sub package`将有冲突的包加上`denpendency_overrides`关键字。
-  ![16_sub_package无override会冲突](16_sub_package无override会冲突)
-  ![17_sub_package有override无冲突](17_sub_package有override无冲突)
+  - ![16_sub_package无override会冲突](16_sub_package无override会冲突)
+  - ![17_sub_package有override无冲突](17_sub_package有override无冲突)
+  - ![18_main_target_override无冲突](18_main_target_override无冲突)
   
 - 或者使用模糊的版本号, 让冲突的三方库存在交集，这样系统就不会报错了。
 ```yaml
