@@ -606,9 +606,9 @@ flutter packages pub publish --dry-run --server={your pub server}
 ## 多个FlutterPackage版本冲突解决:
 - 在实际开发中,我们可遇到同一个工程中包括多个`sub packages`，而这个`sub packages`又同时依赖同一个`package`,但是对应不通的版本.解决方案有2种
 - 在`当前应用`或者`sub package`将有冲突的包加上`denpendency_overrides`关键字。
-  - ![16_sub_package无override会冲突](16_sub_package无override会冲突)
-  - ![17_sub_package有override无冲突](17_sub_package有override无冲突)
-  - ![18_main_target_override无冲突](18_main_target_override无冲突)
+  - ![16_sub_package无override会冲突](16_sub_package无override会冲突.png)
+  - ![17_sub_package有override无冲突](17_sub_package有override无冲突.png)
+  - ![18_main_target_override无冲突](18_main_target_override无冲突.png)
   
 - 或者使用模糊的版本号, 让冲突的三方库存在交集，这样系统就不会报错了。
 ```yaml
@@ -619,10 +619,9 @@ package1: ^v1.0.0
 - 实际开发中,对于经常需要使用的基础库建议采用 `one code base`,定期去合并，避免此类问题。
 
 ## 参考资料:
-- [Flutter plugins官方](https://github.com/flutter/plugins)
+- [Flutter Plugins](https://github.com/flutter/plugins/tree/master/packages)
 - [developing-packages](https://flutterchina.club/developing-packages/#types)
 - [Flutter Engine](https://github.com/flutter/engine)
 - [Flutter与Native通信 - PlatformChannel源码分析](https://cloud.tencent.com/developer/article/1366113)
 - [深入理解Flutter Platform Channel](https://mp.weixin.qq.com/s/FT7UFbee1AtxmKt3iJgvyg)
 - [awesome-flutter](https://github.com/Solido/awesome-flutter)
-- [Flutter Plugins](https://github.com/flutter/plugins/tree/master/packages)
