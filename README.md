@@ -260,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ```
 了解上面的几个基本类之后,再看下面的通信过程就比较容易理解了。
 ![11_flutter_plugin_communication](11_flutter_plugin_communication.png)
- 
+![11_flutter_system_overview](11_flutter_system_overview.png)
 
 ## FlutterPlugin开发
 - 目前flutter的生态环境不够完善,官方发的插件库无法覆盖我们所有的业务需求,比如`地图`,`支付`,`音视频`,对国内一些大厂的三方`SDK`支持不够友好,所以在实际开发中可能需要自己开发对应的插件.下面以获取设备信息为例,来创建一个简单的插件.主要分为四个阶段, 创建Flutter Plugin工程, 编写`Android`平台的代码,编写`Flutter`平台的代码, `编写iOS`平台的代码.此外我们还需要对自己创建的插件做一些测试和example的补充,并且附上完成的ReadME.md以及Api文档。
@@ -625,3 +625,4 @@ package1: ^v1.0.0
 - [Flutter与Native通信 - PlatformChannel源码分析](https://cloud.tencent.com/developer/article/1366113)
 - [深入理解Flutter Platform Channel](https://mp.weixin.qq.com/s/FT7UFbee1AtxmKt3iJgvyg)
 - [awesome-flutter](https://github.com/Solido/awesome-flutter)
+- [https://mp.weixin.qq.com/s?sn=d018df8b4639f2ff3e6666021de694f5&__biz=Mzg5MTA4Mzg5NA%3D%3D&mid=2247483750&idx=1&scene=21&exportkey=AymbcEUD5XJOY7t916yaUUQ%3D&pass_ticket=iq39b0bBTvOdIhxl7yN7IMZqWXE6U2JEsc9Cem3LBZk37L9F%2FJUN2OSfsfT6fb2k](https://mp.weixin.qq.com/s?sn=d018df8b4639f2ff3e6666021de694f5&__biz=Mzg5MTA4Mzg5NA%3D%3D&mid=2247483750&idx=1&scene=21&exportkey=AymbcEUD5XJOY7t916yaUUQ%3D&pass_ticket=iq39b0bBTvOdIhxl7yN7IMZqWXE6U2JEsc9Cem3LBZk37L9F%2FJUN2OSfsfT6fb2k)

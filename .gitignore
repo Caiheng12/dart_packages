@@ -11,6 +11,9 @@
 .buildlog/
 .history
 .svn/
+flutter_plugin_android
+flutter-plugin-bugfix
+flutter-plugin-bugfix-android
 
 # IntelliJ related
 *.iml
